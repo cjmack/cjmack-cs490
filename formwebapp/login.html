@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Login Page</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+$(document) .ready( function() {
+alert("running script");
+$("#btnLogin") .click(function() {
+	alert ("clicked");
+	var UserName=document.getElementById("t_username").value;
+	var UserPassword=document.getElementById("t_password").value;
+	var theData= "theUsername="+UserName+"&"+"thePassword="+UserPassword;
+	alert("Sending: "+theData);
+	var theUrl = "http://localhost:8080/formwebapp/resources/online/authSession";
+	$.ajax( {
+		url: theUrl,
+		type: "POST",
+		dataType: "text",
+		contentType: "application/x-www-form-urlencoded",
+		data: theData,
+		success: function(theData) { 
+						alert("success"); 
+						window.location.href="http://localhost:8080/formwebapp/form.html"
+						},
+		error:function(status) { 
+						alert("error: "+status); 
+			},
+	} );
+});
+});
+</script>
+</head>
+<body>
+<h3>Please login</h3>
+<div id="login">
+<label form="t_updateUserName">Username: </label>
+<input type="text" id="t_username" value="type username here" /> 
+<br />
+<label form="t_updatePassword">Password: </label>
+<input type="text" id="t_password" value="type password here" />
+<br />
+<br />
+<button id="btnLogin">Login!</button>
+<button id="btnRegister">Register Now!</button>
+</div>
+</body>
+</html>
