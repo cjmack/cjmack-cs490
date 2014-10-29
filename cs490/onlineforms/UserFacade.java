@@ -85,6 +85,39 @@ public class UserFacade {
 			return 0; // case that the test failed
 		}
 	}//end authenticateUser class
+		
+	/**
+	 Deauthenticate User (logout essentially)
+	*/
+	public int deauthenticateUser(int studentID) throws SQLException, ClassNotFoundException, NamingException
+	{
+			// Get the connection from the IgredinetDataAccess singleton
+			Connection con = dao.getConnection();
+				
+			//check if they're logged in
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM authenticated_Session WHERE userId = ?");
+			stmt.setInt(1, studentID);
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs != null)
+				{
+					int theUserId2 = studentID;
+					PreparedStatement pstmt = con.prepareStatement("DELETE FROM authenticated_Session WHERE userId = ?");
+					pstmt.setInt(1, theUserId2);
+					int rs2 = pstmt.executeUpdate();
+					System.out.println("Result 2 is: " + rs2);
+					
+					if( rs2 > 0){
+						return 1;
+					}
+					else{
+						return 0;
+					}
+				}
+			else //they weren't logged in
+				{return 0;}
+			
+	}//end deauthenticateUser class
 	
 	/**
 		Session validation method for user.

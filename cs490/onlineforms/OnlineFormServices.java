@@ -344,13 +344,6 @@ public class OnlineFormServices{
 	//MultivaluedMap is a special data structure for storing form data
 	public Response authenticateUser(MultivaluedMap<String,String> loginFields) throws SQLException, ClassNotFoundException, NamingException {
 			
-			/*String newUserName = userFields.getFirst("Username");
-			String newUserFirstName = userFields.getFirst("FirstName");
-			String newUserLastName = userFields.getFirst("LastName");
-			String newUserEmail = userFields.getFirst("Email");
-			String newUserPassword = userFields.getFirst("Password");
-			System.out.println( newUserName + " " + newUserFirstName + " " + newUserLastName + " " + newUserEmail + " " + newUserPassword);*/
-			
 			String username = loginFields.getFirst("theUsername");
 			String password = loginFields.getFirst("thePassword");
 			String sessionID = loginFields.getFirst("theSessionID");
@@ -358,10 +351,6 @@ public class OnlineFormServices{
 			
 			//Get a reference to the UserFacade singleton object
 			UserFacade iFacade = UserFacade.getInstance();
-	
-			//Create SpecialPrmissionForm array with new values entered
-			//OnlineUser theUserToAdd = new OnlineUser(newUserName, newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
-			//System.out.println(theUserToAdd);
 			
 			//Call the FormFacade method getForms to get the new form(s)
 			int result = iFacade.authenticateUser(username, password, sessionID);
@@ -369,8 +358,6 @@ public class OnlineFormServices{
 	
 			//Create a Json string representation of the array of forms
 			if(result == 1) {
-				//Gson theGsonobj = new Gson();
-				//String result = theGsonobj.toJson(resultArray);
 		
 				//Add the JSON string to the response message body.
 				ResponseBuilder rb = Response.ok(result, MediaType.TEXT_PLAIN);
@@ -387,4 +374,43 @@ public class OnlineFormServices{
 				return Response.status(403).build();
 			}//end else
 	}//end method authSession
+
+	@Path("/authSession/{id}") //Same path as retrieve, but different http type (POST)
+	@DELETE	// HTTP request type for deleting from server
+	public Response deauthenticateUser(@PathParam("id") String theID) throws SQLException, ClassNotFoundException, NamingException {
+			
+			// convert the path parameter to an int
+			int theId = 0;
+			try {
+				theId = Integer.parseInt(theID);
+			} catch (NumberFormatException ne) {
+				// handle error here
+			}
+			System.out.println( theId );
+			
+			//Get a reference to the UserFacade singleton object
+			UserFacade iFacade = UserFacade.getInstance();
+			
+			//Call the FormFacade method getForms to get the new form(s)
+			int result = iFacade.deauthenticateUser( theId );
+			System.out.println("In authenticate User(OnlineFormServices).. result is: " + result);
+	
+			//Create a Json string representation of the array of forms
+			if(result == 1) {
+		
+				//Add the JSON string to the response message body.
+				ResponseBuilder rb = Response.ok(result, MediaType.TEXT_PLAIN);
+		
+				//Setting the HTTP status code to 200
+				rb.status(204);
+		
+				//Create and return the Response object
+				return rb.build();
+		
+			}//end if
+	
+			else { //form not found; pick an error status code and send empty response object
+				return Response.status(403).build();
+			}//end else
+	}//end method authSession	
 }//end class file
