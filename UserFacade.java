@@ -195,7 +195,6 @@ public class UserFacade {
 		//Set Inactive flag = false (initially set to "true" (in OnlineUser.java))
 		theUserToAdd.setInactive();
 		Boolean newUserInactive = theUserToAdd.getInactive();
-
 		
 		//Study the INSERT statement
 		PreparedStatement createStmt = con.prepareStatement("INSERT INTO onlineforms_user(userName, userFirstName, userLastName, userEmail, userId, userPassword, inactive) VALUES (?, ?, ?, ?, ?, ?, ?)");

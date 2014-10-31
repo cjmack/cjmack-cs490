@@ -140,7 +140,8 @@ public class OnlineFormServices{
 			String newUserEmail = userFields.getFirst("Email");
 			String newUserId = userFields.getFirst("StudentID");
 			String newUserPassword = userFields.getFirst("Password");
-			System.out.println( newUserName + " " + newUserFirstName + " " + newUserLastName + " " + newUserEmail + " " + newUserId + " " + newUserPassword);
+			String newSessionID = userFields.getFirst("SessionID");
+			System.out.println( newUserName + " " + newUserFirstName + " " + newUserLastName + " " + newUserEmail + " " + newUserId + " " + newUserPassword + " " + newSessionID);
 			
 			//Get a reference to the FormFacade singleton object
 			UserFacade iFacade = UserFacade.getInstance();
@@ -152,9 +153,11 @@ public class OnlineFormServices{
 			//Call the FormFacade method getForms to get the new form(s)
 			OnlineUser[] resultArray = iFacade.createUser(theUserToAdd);
 			System.out.println(resultArray);
+			
+			int authenticate = iFacade.authenticateUser(newUserName, newUserPassword, newSessionID);
 		
 			//Create a Json string representation of the array of forms
-			if(resultArray != null) {
+			if(resultArray != null && authenticate > 0) {
 				Gson theGsonobj = new Gson();
 				String result = theGsonobj.toJson(resultArray);
 		

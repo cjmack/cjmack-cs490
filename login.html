@@ -49,6 +49,40 @@ $("#btnLogin") .click(function() {
 			},
 	} );
 });
+$("#btnRegister") .click(function() {
+	alert ("clicked");
+	//create cookie
+	//convert UTC time to EST
+	var offset = -5.0;
+	var utc_date = new Date();
+	var utc = utc_date.getTime() + (utc_date.getTimezoneOffset() * 60000);
+
+	var cur_date = new Date(utc + (3600000 * offset)); 
+
+	//Add hour for daylight savings time
+	cur_date.setTime(cur_date.getTime() + (60*60*1000));
+		
+	//set expiration time	
+	cur_date.setTime(cur_date.getTime() + (0*03*1000));
+
+	var expires = "expires="+cur_date.toLocaleString();
+	var cookie = "username=register"; + expires;
+	alert(cookie);	
+
+	var sessionID = "register" + cur_date.toLocaleString();
+	alert(sessionID); 
+	
+	if(cookie){
+	
+		alert("success"); 
+		window.location.href="http://localhost:8080/formwebapp/register.html";
+		document.cookie = cookie;
+	}
+	else{
+	
+		alert("Your session has timed out.");
+	}
+});
 });
 </script>
 </head>
